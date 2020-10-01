@@ -1,0 +1,62 @@
+# Changelog
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [BETA]
+
+## [1.4.0] - 2020-09-07
+### Added
+- Smaller Shield
+- Better Leather Armor (No Brown Stripes)
+- Transparent Pumpkin Blur
+- Character Beds
+- Need to add the songs and the same changes to lite
+- Uno reverse as totem
+- Blocks music disc = https://youtu.be/yiS0DPekSDQ
+
+
+## [1.3.9] - 2020-08-21
+### Added
+- New Logo
+- 11 music disc = https://youtu.be/3sfY1lRkEVA
+
+### Remove
+- Old Logo
+
+## [1.3.8] - 2020-08-03
+### Added
+- New Diamond Stuff
+
+## [1.3.7] - 2020-07-27
+### Remove
+- Remove unedited textures
+
+## [1.3.6] - 2020-07-19
+### Added
+- Changelog because I forgot to
+- Emerald Ores looks nice
+- Lighting is better
+- Dark Mode UI
+- Night and day sky ~ clouds
+- New Netherite Armor
+- Glass is clear
+- Water waves
+- Better looking Netherite tools
+- new cal loading screen
+- tips added
+- Marketplace Ads are gone
+- OG Deafth Noise
+- Change Minecraft logo
+- Clearer Nether portal
+- pig men 
+- java noises
+- space painting
+- darth vader painting
+- Tnt Animations
+- Darth Vader Huge Painting
+- TV with Minecraft Loading
+- Plants moving
+- Trap Chest
+- Iron gollum
