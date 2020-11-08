@@ -20,22 +20,6 @@
         {
           "name": "sounds/ambient/weather/rain4",
           "volume": 0.1
-        },
-        {
-          "name": "sounds/ambient/weather/rain5",
-          "volume": 0.1
-        },
-        {
-          "name": "sounds/ambient/weather/rain6",
-          "volume": 0.1
-        },
-        {
-          "name": "sounds/ambient/weather/rain7",
-          "volume": 0.1
-        },
-        {
-          "name": "sounds/ambient/weather/rain8",
-          "volume": 0.1
         }
       ]
     },
