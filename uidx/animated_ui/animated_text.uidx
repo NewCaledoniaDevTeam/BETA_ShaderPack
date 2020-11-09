@@ -1,0 +1,126 @@
+{
+  "namespace": "CrisXolt_anm_text",
+
+  "anim_text_color_panel": {
+    "type": "panel",
+    "size": [ "100%c", 10 ],
+    "clips_children": true,
+    "controls": [
+      { "text_stack_panel@CrisXolt_anm_text.text_stack_panel": { } }
+    ]
+  },
+
+  "text_label": {
+    "type": "label",
+    "shadow": false,
+    "text": "Testing",
+    "size": [ "default", 10 ]
+  },
+
+  "text_stack_panel": {
+    "type": "stack_panel",
+    "anchor_from": "top_middle",
+    "anchor_to": "top_middle",
+    "size": [ "100%cm", "100%c" ],
+    "offset": "$anm_text_offset",
+    "$text_label_control|default": "CrisXolt_anm_text.text_label",
+    "controls": [
+      { "01@$text_label_control": { "color": "$text_color_frame_01" } },
+      { "02@$text_label_control": { "color": "$text_color_frame_02" } },
+      { "03@$text_label_control": { "color": "$text_color_frame_03" } },
+      { "04@$text_label_control": { "color": "$text_color_frame_04" } },
+      { "05@$text_label_control": { "color": "$text_color_frame_05" } },
+      { "06@$text_label_control": { "color": "$text_color_frame_06" } },
+      { "07@$text_label_control": { "color": "$text_color_frame_07" } },
+      { "08@$text_label_control": { "color": "$text_color_frame_08" } },
+      { "09@$text_label_control": { "color": "$text_color_frame_09" } },
+      { "10@$text_label_control": { "color": "$text_color_frame_10" } },
+      { "11@$text_label_control": { "color": "$text_color_frame_11" } },
+      { "12@$text_label_control": { "color": "$text_color_frame_12" } },
+      { "13@$text_label_control": { "color": "$text_color_frame_13" } },
+      { "14@$text_label_control": { "color": "$text_color_frame_14" } },
+      { "15@$text_label_control": { "color": "$text_color_frame_15" } },
+      { "16@$text_label_control": { "color": "$text_color_frame_16" } },
+      { "17@$text_label_control": { "color": "$text_color_frame_17" } },
+      { "18@$text_label_control": { "color": "$text_color_frame_18" } },
+      { "19@$text_label_control": { "color": "$text_color_frame_19" } },
+      { "20@$text_label_control": { "color": "$text_color_frame_20" } },
+      { "21@$text_label_control": { "color": "$text_color_frame_21" } },
+      { "22@$text_label_control": { "color": "$text_color_frame_22" } },
+      { "23@$text_label_control": { "color": "$text_color_frame_23" } },
+      { "24@$text_label_control": { "color": "$text_color_frame_24" } },
+      { "25@$text_label_control": { "color": "$text_color_frame_25" } },
+      { "26@$text_label_control": { "color": "$text_color_frame_26" } },
+      { "27@$text_label_control": { "color": "$text_color_frame_27" } },
+      { "28@$text_label_control": { "color": "$text_color_frame_28" } },
+      { "29@$text_label_control": { "color": "$text_color_frame_29" } },
+      { "30@$text_label_control": { "color": "$text_color_frame_30" } },
+      { "31@$text_label_control": { "color": "$text_color_frame_31" } },
+      { "32@$text_label_control": { "color": "$text_color_frame_32" } },
+      { "33@$text_label_control": { "color": "$text_color_frame_33" } },
+      { "34@$text_label_control": { "color": "$text_color_frame_34" } },
+      { "35@$text_label_control": { "color": "$text_color_frame_35" } },
+      { "36@$text_label_control": { "color": "$text_color_frame_36" } },
+      { "37@$text_label_control": { "color": "$text_color_frame_37" } },
+      { "38@$text_label_control": { "color": "$text_color_frame_38" } },
+      { "39@$text_label_control": { "color": "$text_color_frame_39" } },
+      { "40@$text_label_control": { "color": "$text_color_frame_40" } }
+    ]
+  },
+
+  /*//// XP Number Frames ////*/
+
+  "offset_base@CrisXolt_anm_ui.uv_base": {
+    "anim_type": "offset",
+    "easing": "linear",
+    "duration": "$xp_number_duration_per_frame",
+    "$max_xp_number_frames|default": null,
+    "variables": [
+      {
+        "requires": "$max_xp_number_frames",
+        "$next_frame": "@CrisXolt_anm_text.xp_number_01"
+      }
+    ]
+  },
+    
+  "xp_number_01@CrisXolt_anm_text.offset_base": { "$uv_frame": [ 0, 0    ], "$max_xp_number_frames": "($total_xp_number_frames = 01_frames)", "$next_frame": "@CrisXolt_anm_text.xp_number_02" },
+  "xp_number_02@CrisXolt_anm_text.offset_base": { "$uv_frame": [ 0, -10  ], "$max_xp_number_frames": "($total_xp_number_frames = 02_frames)", "$next_frame": "@CrisXolt_anm_text.xp_number_03" },
+  "xp_number_03@CrisXolt_anm_text.offset_base": { "$uv_frame": [ 0, -20  ], "$max_xp_number_frames": "($total_xp_number_frames = 03_frames)", "$next_frame": "@CrisXolt_anm_text.xp_number_04" },
+  "xp_number_04@CrisXolt_anm_text.offset_base": { "$uv_frame": [ 0, -30  ], "$max_xp_number_frames": "($total_xp_number_frames = 04_frames)", "$next_frame": "@CrisXolt_anm_text.xp_number_05" },
+  "xp_number_05@CrisXolt_anm_text.offset_base": { "$uv_frame": [ 0, -40  ], "$max_xp_number_frames": "($total_xp_number_frames = 05_frames)", "$next_frame": "@CrisXolt_anm_text.xp_number_06" },
+  "xp_number_06@CrisXolt_anm_text.offset_base": { "$uv_frame": [ 0, -50  ], "$max_xp_number_frames": "($total_xp_number_frames = 06_frames)", "$next_frame": "@CrisXolt_anm_text.xp_number_07" },
+  "xp_number_07@CrisXolt_anm_text.offset_base": { "$uv_frame": [ 0, -60  ], "$max_xp_number_frames": "($total_xp_number_frames = 07_frames)", "$next_frame": "@CrisXolt_anm_text.xp_number_08" },
+  "xp_number_08@CrisXolt_anm_text.offset_base": { "$uv_frame": [ 0, -70  ], "$max_xp_number_frames": "($total_xp_number_frames = 08_frames)", "$next_frame": "@CrisXolt_anm_text.xp_number_09" },
+  "xp_number_09@CrisXolt_anm_text.offset_base": { "$uv_frame": [ 0, -80  ], "$max_xp_number_frames": "($total_xp_number_frames = 09_frames)", "$next_frame": "@CrisXolt_anm_text.xp_number_10" },
+  "xp_number_10@CrisXolt_anm_text.offset_base": { "$uv_frame": [ 0, -90  ], "$max_xp_number_frames": "($total_xp_number_frames = 10_frames)", "$next_frame": "@CrisXolt_anm_text.xp_number_11" },
+  "xp_number_11@CrisXolt_anm_text.offset_base": { "$uv_frame": [ 0, -100 ], "$max_xp_number_frames": "($total_xp_number_frames = 11_frames)", "$next_frame": "@CrisXolt_anm_text.xp_number_12" },
+  "xp_number_12@CrisXolt_anm_text.offset_base": { "$uv_frame": [ 0, -110 ], "$max_xp_number_frames": "($total_xp_number_frames = 12_frames)", "$next_frame": "@CrisXolt_anm_text.xp_number_13" },
+  "xp_number_13@CrisXolt_anm_text.offset_base": { "$uv_frame": [ 0, -120 ], "$max_xp_number_frames": "($total_xp_number_frames = 13_frames)", "$next_frame": "@CrisXolt_anm_text.xp_number_14" },
+  "xp_number_14@CrisXolt_anm_text.offset_base": { "$uv_frame": [ 0, -130 ], "$max_xp_number_frames": "($total_xp_number_frames = 14_frames)", "$next_frame": "@CrisXolt_anm_text.xp_number_15" },
+  "xp_number_15@CrisXolt_anm_text.offset_base": { "$uv_frame": [ 0, -140 ], "$max_xp_number_frames": "($total_xp_number_frames = 15_frames)", "$next_frame": "@CrisXolt_anm_text.xp_number_16" },
+  "xp_number_16@CrisXolt_anm_text.offset_base": { "$uv_frame": [ 0, -150 ], "$max_xp_number_frames": "($total_xp_number_frames = 16_frames)", "$next_frame": "@CrisXolt_anm_text.xp_number_17" },
+  "xp_number_17@CrisXolt_anm_text.offset_base": { "$uv_frame": [ 0, -160 ], "$max_xp_number_frames": "($total_xp_number_frames = 17_frames)", "$next_frame": "@CrisXolt_anm_text.xp_number_18" },
+  "xp_number_18@CrisXolt_anm_text.offset_base": { "$uv_frame": [ 0, -170 ], "$max_xp_number_frames": "($total_xp_number_frames = 18_frames)", "$next_frame": "@CrisXolt_anm_text.xp_number_19" },
+  "xp_number_19@CrisXolt_anm_text.offset_base": { "$uv_frame": [ 0, -180 ], "$max_xp_number_frames": "($total_xp_number_frames = 19_frames)", "$next_frame": "@CrisXolt_anm_text.xp_number_20" },
+  "xp_number_20@CrisXolt_anm_text.offset_base": { "$uv_frame": [ 0, -190 ], "$max_xp_number_frames": "($total_xp_number_frames = 20_frames)", "$next_frame": "@CrisXolt_anm_text.xp_number_21" },
+  "xp_number_21@CrisXolt_anm_text.offset_base": { "$uv_frame": [ 0, -200 ], "$max_xp_number_frames": "($total_xp_number_frames = 21_frames)", "$next_frame": "@CrisXolt_anm_text.xp_number_22" },
+  "xp_number_22@CrisXolt_anm_text.offset_base": { "$uv_frame": [ 0, -210 ], "$max_xp_number_frames": "($total_xp_number_frames = 22_frames)", "$next_frame": "@CrisXolt_anm_text.xp_number_23" },
+  "xp_number_23@CrisXolt_anm_text.offset_base": { "$uv_frame": [ 0, -220 ], "$max_xp_number_frames": "($total_xp_number_frames = 23_frames)", "$next_frame": "@CrisXolt_anm_text.xp_number_24" },
+  "xp_number_24@CrisXolt_anm_text.offset_base": { "$uv_frame": [ 0, -230 ], "$max_xp_number_frames": "($total_xp_number_frames = 24_frames)", "$next_frame": "@CrisXolt_anm_text.xp_number_25" },
+  "xp_number_25@CrisXolt_anm_text.offset_base": { "$uv_frame": [ 0, -240 ], "$max_xp_number_frames": "($total_xp_number_frames = 25_frames)", "$next_frame": "@CrisXolt_anm_text.xp_number_26" },
+  "xp_number_26@CrisXolt_anm_text.offset_base": { "$uv_frame": [ 0, -250 ], "$max_xp_number_frames": "($total_xp_number_frames = 26_frames)", "$next_frame": "@CrisXolt_anm_text.xp_number_27" },
+  "xp_number_27@CrisXolt_anm_text.offset_base": { "$uv_frame": [ 0, -260 ], "$max_xp_number_frames": "($total_xp_number_frames = 27_frames)", "$next_frame": "@CrisXolt_anm_text.xp_number_28" },
+  "xp_number_28@CrisXolt_anm_text.offset_base": { "$uv_frame": [ 0, -270 ], "$max_xp_number_frames": "($total_xp_number_frames = 28_frames)", "$next_frame": "@CrisXolt_anm_text.xp_number_29" },
+  "xp_number_29@CrisXolt_anm_text.offset_base": { "$uv_frame": [ 0, -280 ], "$max_xp_number_frames": "($total_xp_number_frames = 29_frames)", "$next_frame": "@CrisXolt_anm_text.xp_number_30" },
+  "xp_number_30@CrisXolt_anm_text.offset_base": { "$uv_frame": [ 0, -290 ], "$max_xp_number_frames": "($total_xp_number_frames = 30_frames)", "$next_frame": "@CrisXolt_anm_text.xp_number_31" },
+  "xp_number_31@CrisXolt_anm_text.offset_base": { "$uv_frame": [ 0, -300 ], "$max_xp_number_frames": "($total_xp_number_frames = 31_frames)", "$next_frame": "@CrisXolt_anm_text.xp_number_32" },
+  "xp_number_32@CrisXolt_anm_text.offset_base": { "$uv_frame": [ 0, -310 ], "$max_xp_number_frames": "($total_xp_number_frames = 32_frames)", "$next_frame": "@CrisXolt_anm_text.xp_number_33" },
+  "xp_number_33@CrisXolt_anm_text.offset_base": { "$uv_frame": [ 0, -320 ], "$max_xp_number_frames": "($total_xp_number_frames = 33_frames)", "$next_frame": "@CrisXolt_anm_text.xp_number_34" },
+  "xp_number_34@CrisXolt_anm_text.offset_base": { "$uv_frame": [ 0, -330 ], "$max_xp_number_frames": "($total_xp_number_frames = 34_frames)", "$next_frame": "@CrisXolt_anm_text.xp_number_35" },
+  "xp_number_35@CrisXolt_anm_text.offset_base": { "$uv_frame": [ 0, -340 ], "$max_xp_number_frames": "($total_xp_number_frames = 35_frames)", "$next_frame": "@CrisXolt_anm_text.xp_number_36" },
+  "xp_number_36@CrisXolt_anm_text.offset_base": { "$uv_frame": [ 0, -350 ], "$max_xp_number_frames": "($total_xp_number_frames = 36_frames)", "$next_frame": "@CrisXolt_anm_text.xp_number_37" },
+  "xp_number_37@CrisXolt_anm_text.offset_base": { "$uv_frame": [ 0, -360 ], "$max_xp_number_frames": "($total_xp_number_frames = 37_frames)", "$next_frame": "@CrisXolt_anm_text.xp_number_38" },
+  "xp_number_38@CrisXolt_anm_text.offset_base": { "$uv_frame": [ 0, -370 ], "$max_xp_number_frames": "($total_xp_number_frames = 38_frames)", "$next_frame": "@CrisXolt_anm_text.xp_number_39" },
+  "xp_number_39@CrisXolt_anm_text.offset_base": { "$uv_frame": [ 0, -380 ], "$max_xp_number_frames": "($total_xp_number_frames = 39_frames)", "$next_frame": "@CrisXolt_anm_text.xp_number_40" },
+  "xp_number_40@CrisXolt_anm_text.offset_base": { "$uv_frame": [ 0, -390 ], "$max_xp_number_frames": "($total_xp_number_frames = 40_frames)", "$next_frame": "@CrisXolt_anm_text.xp_number_01" }
+}

@@ -1,0 +1,103 @@
+{
+  "namespace": "CrisXolt_anm_xp_number",
+
+  "xp_number_panel":{
+    "type": "panel",
+    "anchor_from": "top_middle",
+    "anchor_to": "top_middle",
+    "size": [ 182, 10 ],
+    "offset": [ 0, -10 ],
+    "$text_label_control": "CrisXolt_anm_xp_number.text_label",
+    "$anm_text_offset": "@CrisXolt_anm_text.xp_number_01",
+    "controls": [
+      { "xp_number_label@CrisXolt_anm_text.anim_text_color_panel":{ "offset": [ 0, 0 ], "layer": 3 } },
+      /* 4 directions about borders */
+      { "border_left@CrisXolt_anm_xp_number.border_xp_number_label":{ "offset": [ -1, 0 ] } },
+      { "border_up@CrisXolt_anm_xp_number.border_xp_number_label":{ "offset": [ 0, -1 ] } },
+      { "border_down@CrisXolt_anm_xp_number.border_xp_number_label":{ "offset": [ 0, 1 ] } },
+      { "border_right@CrisXolt_anm_xp_number.border_xp_number_label":{ "offset": [ 1, 0 ] } }
+    ],
+    "bindings": [
+      {
+        "binding_name": "#level_number_visible",
+        "binding_type": "global",
+        "binding_name_override": "#visible"
+      }
+    ],
+
+    "$text_color_frame_01": "$xp_number_color_frame_01",
+    "$text_color_frame_02": "$xp_number_color_frame_02",
+    "$text_color_frame_03": "$xp_number_color_frame_03",
+    "$text_color_frame_04": "$xp_number_color_frame_04",
+    "$text_color_frame_05": "$xp_number_color_frame_05",
+    "$text_color_frame_06": "$xp_number_color_frame_06",
+    "$text_color_frame_07": "$xp_number_color_frame_07",
+    "$text_color_frame_08": "$xp_number_color_frame_08",
+    "$text_color_frame_09": "$xp_number_color_frame_09",
+    "$text_color_frame_10": "$xp_number_color_frame_10",
+    "$text_color_frame_11": "$xp_number_color_frame_11",
+    "$text_color_frame_12": "$xp_number_color_frame_12",
+    "$text_color_frame_13": "$xp_number_color_frame_13",
+    "$text_color_frame_14": "$xp_number_color_frame_14",
+    "$text_color_frame_15": "$xp_number_color_frame_15",
+    "$text_color_frame_16": "$xp_number_color_frame_16",
+    "$text_color_frame_17": "$xp_number_color_frame_17",
+    "$text_color_frame_18": "$xp_number_color_frame_18",
+    "$text_color_frame_19": "$xp_number_color_frame_19",
+    "$text_color_frame_20": "$xp_number_color_frame_20",
+    "$text_color_frame_21": "$xp_number_color_frame_21",
+    "$text_color_frame_22": "$xp_number_color_frame_22",
+    "$text_color_frame_23": "$xp_number_color_frame_23",
+    "$text_color_frame_24": "$xp_number_color_frame_24",
+    "$text_color_frame_25": "$xp_number_color_frame_25",
+    "$text_color_frame_26": "$xp_number_color_frame_26",
+    "$text_color_frame_27": "$xp_number_color_frame_27",
+    "$text_color_frame_28": "$xp_number_color_frame_28",
+    "$text_color_frame_29": "$xp_number_color_frame_29",
+    "$text_color_frame_30": "$xp_number_color_frame_30",
+    "$text_color_frame_31": "$xp_number_color_frame_31",
+    "$text_color_frame_32": "$xp_number_color_frame_32",
+    "$text_color_frame_33": "$xp_number_color_frame_33",
+    "$text_color_frame_34": "$xp_number_color_frame_34",
+    "$text_color_frame_35": "$xp_number_color_frame_35",
+    "$text_color_frame_36": "$xp_number_color_frame_36",
+    "$text_color_frame_37": "$xp_number_color_frame_37",
+    "$text_color_frame_38": "$xp_number_color_frame_38",
+    "$text_color_frame_39": "$xp_number_color_frame_39",
+    "$text_color_frame_40": "$xp_number_color_frame_40"
+  },
+
+  "text_label": {
+    "type": "label",
+    "shadow": false,
+    "text": "#level_number",
+    "size": [ "default", 10 ],
+    "bindings": [
+      {
+        "binding_name": "#level_number",
+        "binding_type": "global"
+      }
+    ]
+  },
+
+  "border_xp_number_label": {
+    "type": "label",
+    "text": "#level_number",
+    "size": [ "default", 10 ],
+    "anchor_from": "top_middle",
+    "anchor_to": "top_middle",
+    "layer": 1,
+    "color": [ 0, 0, 0 ],
+    "bindings": [
+      {
+        "binding_name": "#level_number",
+        "binding_type": "global"
+      },
+      {
+        "binding_name": "#level_number_visible",
+        "binding_type": "global",
+        "binding_name_override": "#visible"
+      }
+    ]
+  }
+}

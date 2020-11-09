@@ -6,6 +6,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [BETA]
 
+## [1.4.5] - 2020-11-7
+### Added
+- Creaper pumpkin heads (on and off)
+- rainbow loom
+- xp rainbow bar
+- death star in sky
+
+## [1.4.4] - 2020-11-7
+### Added
+- New loading messages and splashes
+- https://www.youtube.com/watch?v=mgDMTorgCPg = Far
+- https://www.youtube.com/watch?v=A2qMvzr2g4E = Ward
+- Added New Sounds
+    - Weather
+    - Blocks
+        - end portal
+        - furnace
+        - iron door
+        - iron trapdoor
+        - wooden door
+        - wooden trapdoor
+    - Cave
+    - Dig
+    - Fire
+    - Fireworks
+    - Liquid
+    - Minecart
+    - Mod
+    - portal 
+    - step
+    - random
+
 ## [1.4.3] - 2020-10-11
 ### Added
 - vignette code

@@ -2171,5 +2171,65 @@
       },
       { "inventory_selected_icon_button@common.inventory_selected_icon_button": {} }
     ]
+  },
+
+///XP
+"hotbar_slot_image": {
+    "alpha": 1.0
+  },
+  "start_cap_image": {
+    "alpha": 1.0
+  },
+  "gui_hotbar_grid_item/hotbar_parent": {
+    "layer": 10
+  },
+  "exp_progress_bar_and_hotbar/resizing_xp_bar_with_hotbar": {
+    "controls": [
+      {
+        "hotbar@hud.hotbar_chooser": {
+          "offset": [
+            4,
+            15.5
+          ]
+        }
+      },
+      {
+        "experience_bar_full@CrisXolt_anm_xp_bar.full_xp_bar_texture": {}
+      },
+      {
+        "experience_bar_empty@CrisXolt_anm_xp_bar.empty_xp_bar_texture": {}
+      },
+      {
+        "progress_text_label@CrisXolt_anm_xp_number.xp_number_panel": {
+          "offset": [
+            0,
+            -10
+          ],
+          "layer": 7
+        }
+      }
+    ]
+  },
+  "exp_progress_bar_and_hotbar/hotbar": {
+    "offset": [
+      4,
+      15.5
+    ]
+  },
+  "root_panel": {
+    "$xp_control_offset|default": [
+      0,
+      -13
+    ],
+    "variables": [
+      {
+        "requires": "(not $desktop_screen)",
+        "$xp_control_offset": [
+          0,
+          -13
+        ]
+      }
+    ]
   }
+}
 }

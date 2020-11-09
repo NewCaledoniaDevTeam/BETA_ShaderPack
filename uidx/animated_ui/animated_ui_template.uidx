@@ -1,0 +1,18 @@
+{
+  "namespace": "CrisXolt_anm_ui",
+
+  "uv_base": {
+    "anim_type": "uv",
+    "next": "$next_frame", 
+    "from": "$uv_frame",
+    "to": "$uv_frame"
+  },
+
+  "offset_base": {
+    "anim_type": "offset",
+    "easing": "linear",
+    "next": "$next_frame", 
+    "from": "$uv_frame",
+    "to": "$uv_frame"
+  }
+}

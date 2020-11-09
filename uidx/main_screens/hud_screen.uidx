@@ -1,0 +1,10 @@
+{
+  "exp_progress_bar_and_hotbar/xp_bar": {
+    "controls": [
+      { "experience_bar_full@CrisXolt_anm_xp_bar.full_xp_bar_texture": {} },
+      { "experience_bar_empty@CrisXolt_anm_xp_bar.empty_xp_bar_texture": {} },
+      { "experience_bar_nub@hud_dx.experience_bar_nub": { } },
+      { "progress_text_label@CrisXolt_anm_xp_number.xp_number_panel": { "offset": [ 0, -7 ], "layer": 8 } }
+    ]
+  }
+}

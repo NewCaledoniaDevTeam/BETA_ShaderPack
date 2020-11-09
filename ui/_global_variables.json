@@ -346,7 +346,64 @@
   "$dressing_room_skin_picker_dark_bg_color": [ 0.55, 0.55, 0.55 ],
 
   //////// Play Screen Realms+ "!" atop Pink Realms+ Content Alert ////////
-  "$realmsplus_exclamation_mark_color": [ 1, 1, 1 ]
-}
+  "$realmsplus_exclamation_mark_color": [ 1, 1, 1 ],
 
-// Edited by Offroaders123 for the Dark Mode resource pack for Minecraft Bedrock Edition.
+  //////// XP BAR ////////
+  /*//// Empty XP Bar ////*/
+
+  "$empty_xp_bar_texture": "textures/animated_ui/hud/empty_xp_bar",
+  "$total_empty_xp_bar_frames": "40_frames",
+  "$empty_bar_duration_per_frame": 0.05,
+
+  /*//// Full XP Bar ////*/
+
+  "$fill_xp_bar_texture": "textures/animated_ui/hud/full_xp_bar",
+  "$total_full_xp_bar_frames": "40_frames",
+  "$full_bar_duration_per_frame": 0.05,
+
+  /*//// XP Number ////*/
+
+  "$total_xp_number_frames": "40_frames",
+  "$xp_number_duration_per_frame": 0.05,
+
+  "$xp_number_color_frame_01": [ 0.250, 1.000, 1.000 ], /* Light Blue */
+  "$xp_number_color_frame_02": [ 0.250, 1.000, 0.900 ],
+  "$xp_number_color_frame_03": [ 0.250, 1.000, 0.800 ],
+  "$xp_number_color_frame_04": [ 0.250, 1.000, 0.700 ],
+  "$xp_number_color_frame_05": [ 0.250, 1.000, 0.600 ],
+  "$xp_number_color_frame_06": [ 0.250, 1.000, 0.500 ],
+  "$xp_number_color_frame_07": [ 0.250, 1.000, 0.400 ],
+  "$xp_number_color_frame_08": [ 0.250, 1.000, 0.250 ], /* Green */
+  "$xp_number_color_frame_09": [ 0.375, 1.000, 0.250 ],
+  "$xp_number_color_frame_10": [ 0.500, 1.000, 0.250 ],
+  "$xp_number_color_frame_11": [ 0.625, 1.000, 0.250 ],
+  "$xp_number_color_frame_12": [ 0.750, 1.000, 0.250 ],
+  "$xp_number_color_frame_13": [ 0.875, 1.000, 0.250 ],
+  "$xp_number_color_frame_14": [ 1.000, 1.000, 0.250 ], /* Yellow */
+  "$xp_number_color_frame_15": [ 1.000, 0.900, 0.250 ],
+  "$xp_number_color_frame_16": [ 1.000, 0.800, 0.250 ],
+  "$xp_number_color_frame_17": [ 1.000, 0.700, 0.250 ],
+  "$xp_number_color_frame_18": [ 1.000, 0.600, 0.250 ],
+  "$xp_number_color_frame_19": [ 1.000, 0.500, 0.250 ],
+  "$xp_number_color_frame_20": [ 1.000, 0.400, 0.250 ],
+  "$xp_number_color_frame_21": [ 1.000, 0.250, 0.250 ], /* Red */
+  "$xp_number_color_frame_22": [ 1.000, 0.250, 0.400 ],
+  "$xp_number_color_frame_23": [ 1.000, 0.250, 0.500 ],
+  "$xp_number_color_frame_24": [ 1.000, 0.250, 0.600 ],
+  "$xp_number_color_frame_25": [ 1.000, 0.250, 0.700 ],
+  "$xp_number_color_frame_26": [ 1.000, 0.250, 0.800 ],
+  "$xp_number_color_frame_27": [ 1.000, 0.250, 0.900 ],
+  "$xp_number_color_frame_28": [ 1.000, 0.250, 1.000 ], /* Pink */
+  "$xp_number_color_frame_29": [ 0.875, 0.250, 1.000 ],
+  "$xp_number_color_frame_30": [ 0.750, 0.250, 1.000 ],
+  "$xp_number_color_frame_31": [ 0.625, 0.250, 1.000 ],
+  "$xp_number_color_frame_32": [ 0.500, 0.250, 1.000 ],
+  "$xp_number_color_frame_33": [ 0.375, 0.250, 1.000 ],
+  "$xp_number_color_frame_34": [ 0.250, 0.250, 1.000 ], /* Blue */
+  "$xp_number_color_frame_35": [ 0.250, 0.400, 1.000 ],
+  "$xp_number_color_frame_36": [ 0.250, 0.500, 1.000 ],
+  "$xp_number_color_frame_37": [ 0.250, 0.600, 1.000 ],
+  "$xp_number_color_frame_38": [ 0.250, 0.700, 1.000 ],
+  "$xp_number_color_frame_39": [ 0.250, 0.800, 1.000 ],
+  "$xp_number_color_frame_40": [ 0.250, 0.900, 1.000 ]
+}
