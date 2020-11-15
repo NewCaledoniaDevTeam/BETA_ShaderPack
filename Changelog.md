@@ -6,6 +6,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [BETA]
 
+## [1.4.6] - 2020-11-14
+### Added
+- export world and template button in the world settings for mobile users
+- new spawn egg textures that respresent the entity that it spawns
+- doom pigstep
+- nether music (doom style)
+
+### Fixed
+- Leather items
+- Trapped chest item icon
+
 ## [1.4.5] - 2020-11-7
 ### Added
 - Creaper pumpkin heads (on and off)

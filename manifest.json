@@ -2,9 +2,9 @@
 	"format_version": 2,
 	"header": {
 		"description": "Nice shader designed by Alan, for New Caledonia. Designed for the people, by the people.",
-		"name": "New Caledonia Shader -  Universal 1.4.5",
+		"name": "New Caledonia Shader -  Universal 1.4.6",
 		"uuid": "f058f71e-a235-4669-877a-76be0549c9c5",
-		"version": [1, 4, 5],
+		"version": [1, 4, 6],
 		"min_engine_version": [1, 14, 0]
 	},
 	"modules": [{
