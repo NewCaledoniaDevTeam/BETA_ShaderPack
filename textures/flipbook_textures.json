@@ -24,8 +24,7 @@
   {
     "flipbook_texture": "textures/blocks/beacon",
     "atlas_tile": "beacon",
-	"ticks_per_frame": 2,
-    "frames": [ 0, 0, 0, 1, 2, 3, 4, 4, 4, 3, 2, 1, 0 ]
+    "ticks_per_frame": 10
   },
   {
     "flipbook_texture": "textures/blocks/enchanting_table_side",
@@ -71,13 +70,12 @@
     "flipbook_texture": "textures/blocks/furnace_front_on",
     "atlas_tile": "furnace_front_on",
 	"ticks_per_frame": 2,
-    "frames": [ 0, 1, 2, 3, 4, 5 ]
+    "frames": [ 0, 1, 2, 3, 2, 1, 0 ]
   },
   {
     "flipbook_texture": "textures/blocks/glowstone",
     "atlas_tile": "glowstone",
-	"ticks_per_frame": 3,
-    "frames": [ 0, 1, 2, 3, 4, 5 ]
+	"ticks_per_frame": 15
   },
   {
     "flipbook_texture": "textures/blocks/tnt_top",

@@ -6,10 +6,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [BETA]
 
+## [1.4.9] - 2020-11-22
+### Added
+
+## [1.4.8] - 2020-11-22
+### Fixed
+- glowstone speed
+- beacon speed
+- water bucket
+- lava bucket
+
+## [1.4.7] - 2020-11-21
+### Added
+- Change Pumpkin blur to creeper pumpkin blur
+- prismarine brick to look more like bricks
+- animatison
+    - beacon
+    - front furnace 
+    - lava bucket
+    - water bucket
+    - glowstone
+- netherwood logs middle to look like others
+
+### Fixed
+- red arrow glitch
+
 ## [1.4.6] - 2020-11-14
 ### Added
 - export world and template button in the world settings for mobile users
-- new spawn egg textures that respresent the entity that it spawns
+- new spawn egg textures that represent the entity that it spawns
 - doom pigstep
 - nether music (doom style)
 
