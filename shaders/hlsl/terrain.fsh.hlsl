@@ -47,12 +47,12 @@ float4 water(float4 col,float3 p,float3 wPos,float weather,float uw,float sun,fl
 	sun = smoothstep(.5,.9,sun);
 	float3 T = normalize(abs(wPos)); float cosT = length(T.xz);
 	p.xz = p.xz*float2(1.0,0.4)+smoothstep(0.,8.,abs(p.y-8.))*.5;
-	float n = (snoise(p.xz-TIME*.5)+snoise(float2(p.x-TIME,(p.z+TIME)*.5)))+2.;//[0.~4.]
+	float n = (snoise(p.xz-TOTAL_REAL_WORLD_TIME*.5)+snoise(float2(p.x-TOTAL_REAL_WORLD_TIME,(p.z+TOTAL_REAL_WORLD_TIME)*.5)))+2.;//[0.~4.]
 
 	float4 diffuse = lerp(col,col*lerp(1.5,1.3,T.y*uw),pow(1.-abs(n-2.)*.5,bool(uw)?1.5:2.5));
 	if(bool(uw)){//new C_REF
 		float2 skp = (wPos.xz+n*4.*wPos.xz/max(length(wPos.xz),.5))*cosT*.1;
-		skp.x -= TIME*.05;
+		skp.x -= TOTAL_REAL_WORLD_TIME*.05;
 		float2 ssreff = lerp(float2(.7,.7),float2(.8,.6),clamp(FOG_COLOR.r-FOG_COLOR.g,0.,.4)*2.5);
 		float4 skc = lerp(lerp(col,FOG_COLOR,cosT*ssreff.x),float4(lerp(tex1,FOG_COLOR.rgb,cosT*ssreff.y),1),smoothstep(0.,1.,snoise(skp)));
 		float s_ref = sun*weather*smoothstep(.7,0.,T.y)*lerp(.3,1.,smoothstep(1.5,4.,n))*.9;
@@ -115,7 +115,7 @@ float4 tex1 = TEXTURE_1.Sample(TextureSampler1, PSInput.uv1);
 //DATABASE
 float weather =
 #ifdef FOG
-	smoothstep(.7,1.,FOG_CONTROL.y);
+	smoothstep(.7,.96,FOG_CONTROL.y);
 #else
 	1.;
 #endif
@@ -124,12 +124,13 @@ daylight.x *= weather;
 float sunlight = smoothstep(0.865,0.875,PSInput.uv1.y);
 float indoor = smoothstep(1.0,0.5,PSInput.uv1.y);
 float dusk = min(smoothstep(0.4,0.55,daylight.y),smoothstep(0.8,0.65,daylight.y));
-float uw = step(FOG_COLOR.a,0.);
+float uw = step(FOG_CONTROL.x,0.);
+float nether = FOG_CONTROL.x/FOG_CONTROL.y;nether=step(.1,nether)-step(.12,nether);
 
 //ESBE_tonemap	see http://filmicworlds.com/blog/filmic-tonemapping-operators/
 //1が標準,小…暗,大…明
 float3 ambient = lerp(lerp(lerp(/*雨*/float3(0.8,0.82,1.0),lerp(lerp(/*夜*/float3(0.7,0.72,0.8),/*昼*/float3(1.57,1.56,1.5),daylight.y),/*日没*/float3(1.6,1.25,0.8),dusk),weather),/*水*/float3(1.,1.,1.),PSInput.wf),/*屋内*/float3(1.2,1.1,1.0),indoor);
-if(.3>FOG_CONTROL.x)ambient = FOG_COLOR.rgb/dot(FOG_COLOR.rgb,float3(0.298912, 0.586611, 0.114478))*.1+.9;//fogcolor based tonemap(Nether&Underwater)
+if(uw+nether>.5)ambient = FOG_COLOR.rgb/dot(FOG_COLOR.rgb,float3(0.298912, 0.586611, 0.114478))*.1+.9;//fogcolor based tonemap(Nether&Underwater)
 diffuse.rgb = tonemap(diffuse.rgb,ambient);
 
 //ESBE_light

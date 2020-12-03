@@ -32,5 +32,14 @@
         "$xp_control_offset": [ 0, -13 ]
       }
     ]
+  },
+
+  "vignette_renderer": {
+    "type": "custom",
+    "renderer": "vignette_renderer",
+    "layer": 4
   }
+
+  // { "vignette_rend@vignette_renderer": {} },
+
 }

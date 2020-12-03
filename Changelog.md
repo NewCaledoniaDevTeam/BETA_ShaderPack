@@ -6,8 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [BETA]
 
-## [1.4.9] - 2020-11-22
-### Added
+## [1.4.9] - 2020-12-02
+### Fixed
+- vignette code
+- water code
 
 ## [1.4.8] - 2020-11-22
 ### Fixed

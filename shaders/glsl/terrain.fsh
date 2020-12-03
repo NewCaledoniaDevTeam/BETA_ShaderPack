@@ -35,9 +35,11 @@ varying HM vec3 cPos;
 varying HM vec3 wPos;
 varying float wf;
 
-#include "uniformPerFrameConstants.h"
 #include "util.h"
 #include "snoise.h"
+uniform HM float TOTAL_REAL_WORLD_TIME;
+uniform vec4 FOG_COLOR;
+uniform vec2 FOG_CONTROL;
 
 LAYOUT_BINDING(0) uniform sampler2D TEXTURE_0;
 LAYOUT_BINDING(1) uniform sampler2D TEXTURE_1;
@@ -63,7 +65,7 @@ vec3 tonemap(vec3 col, vec3 gamma){
 }
 
 vec4 water(vec4 col,float weather,float uw,vec3 tex1){
-	HM float time = TIME; vec3 p = cPos;
+	HM float time = TOTAL_REAL_WORLD_TIME; vec3 p = cPos;
 	float sun = smoothstep(.5,.9,uv1.y);
 	vec3 T = normalize(abs(wPos)); float cosT = length(T.xz);
 	p.xz = p.xz*vec2(1.0,0.4)/*縦横比*/+smoothstep(0.,8.,abs(p.y-8.))*.5;
@@ -134,7 +136,7 @@ vec4 tex1 = texture2D(TEXTURE_1,uv1);
 //DATABASE
 float weather =
 #ifdef FOG
-	smoothstep(.7,1.,FOG_CONTROL.y);
+	smoothstep(.7,.96,FOG_CONTROL.y);
 #else
 	1.;
 #endif
@@ -143,14 +145,14 @@ daylight.x *= weather;
 float sunlight = smoothstep(0.865,0.875,uv1.y);
 float indoor = smoothstep(1.0,0.5,uv1.y);
 float dusk = min(smoothstep(0.4,0.55,daylight.y),smoothstep(0.8,0.65,daylight.y));
-float uw = step(FOG_COLOR.a,0.);
-//float nether = step(.02,FOG_CONTROL.x)-step(.5,FOG_CONTROL.x);
+float uw = step(FOG_CONTROL.x,0.);
+float nether = FOG_CONTROL.x/FOG_CONTROL.y;nether=step(.1,nether)-step(.12,nether);
 //float nv = step(.9,texture2D(TEXTURE_1,vec2(0)).r);
 
 //ESBE_tonemap	see http://filmicworlds.com/blog/filmic-tonemapping-operators/
 //1が標準,小…暗,大…明
 vec3 ambient = mix(mix(mix(/*雨*/vec3(0.8,0.82,1.0),mix(mix(/*夜*/vec3(0.7,0.72,0.8),/*昼*/vec3(1.57,1.56,1.5),daylight.y),/*日没*/vec3(1.6,1.25,0.8),dusk),weather),/*水*/vec3(1.),wf),/*屋内*/vec3(1.2,1.1,1.0),indoor);
-if(.3>FOG_CONTROL.x)ambient = FOG_COLOR.rgb/dot(FOG_COLOR.rgb,vec3(0.298912, 0.586611, 0.114478))*.1+.9;//fogcolor based tonemap(Nether&Underwater)
+if(uw+nether>.5)ambient = FOG_COLOR.rgb/dot(FOG_COLOR.rgb,vec3(0.298912, 0.586611, 0.114478))*.1+.9;//fogcolor based tonemap(Nether&Underwater)
 diffuse.rgb = tonemap(diffuse.rgb,ambient);
 
 //ESBE_light
@@ -203,7 +205,7 @@ if(diffuse.a!=0.){
 	if(subdisp.x<1. && subdisp.y<1.){
 		vec3 subback = vec3(1);
 		#define sdif(X,W,Y,C) if(subdisp.x>X && subdisp.x<=X+W && subdisp.y<=Y)subback.rgb=C;
-		sdif(0.,1.,.3,vec3(.3))
+		sdif(0.,1.,.5,vec3(.5))
 		sdif(0.,.2,daylight.y,vec3(1,.7,0))
 		sdif(.2,.2,weather,vec3(.5,.5,1))
 		sdif(.4,.1,dusk,vec3(1.,.5,.2))
