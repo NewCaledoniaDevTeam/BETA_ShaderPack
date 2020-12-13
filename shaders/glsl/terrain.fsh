@@ -68,12 +68,12 @@ vec4 water(vec4 col,float weather,float uw,vec3 tex1){
 	HM float time = TOTAL_REAL_WORLD_TIME; vec3 p = cPos;
 	float sun = smoothstep(.5,.9,uv1.y);
 	vec3 T = normalize(abs(wPos)); float cosT = length(T.xz);
-	p.xz = p.xz*vec2(1.0,0.4)/*縦横比*/+smoothstep(0.,8.,abs(p.y-8.))*.5;
+	p.xz = p.xz*vec2(1.0,0.4)/*Aspect ratio*/+smoothstep(0.,8.,abs(p.y-8.))*.5;
 	float n = (snoise(p.xz-time*.5)+snoise(vec2(p.x-time,(p.z+time)*.5)))+2.;//[0.~4.]
 
 	vec4 diffuse = mix(col,col*mix(1.5,1.3,T.y*uw),pow(1.-abs(n-2.)*.5,bool(uw)?1.5:2.5));
 	if(bool(uw)){//new C_REF
-		highp vec2 skp = (wPos.xz+n*4./*波の高さ*/*wPos.xz/max(length(wPos.xz),.5))*cosT*.1;
+		highp vec2 skp = (wPos.xz+n*4./*Wave height*/*wPos.xz/max(length(wPos.xz),.5))*cosT*.1;
 		skp.x -= time*.05;
 		vec2 ssreff = mix(vec2(.7,.7),vec2(.8,.6),clamp(FOG_COLOR.r-FOG_COLOR.g,0.,.4)*2.5);
 		vec4 skc = mix(mix(col,FOG_COLOR,cosT*.8),vec4(mix(tex1,FOG_COLOR.rgb,cosT*.7),1),smoothstep(0.,1.,snoise(skp)));
@@ -133,34 +133,35 @@ vec4 tex1 = texture2D(TEXTURE_1,uv1);
 	diffuse.a = 1.0;
 #endif
 
-//DATABASE
-float weather =
-#ifdef FOG
-	smoothstep(.7,.96,FOG_CONTROL.y);
-#else
-	1.;
-#endif
-vec2 daylight = texture2D(TEXTURE_1,vec2(0.,1.)).rr;
-daylight.x *= weather;
-float sunlight = smoothstep(0.865,0.875,uv1.y);
-float indoor = smoothstep(1.0,0.5,uv1.y);
-float dusk = min(smoothstep(0.4,0.55,daylight.y),smoothstep(0.8,0.65,daylight.y));
+//datas
+HM float time = TOTAL_REAL_WORLD_TIME;
+float nv = step(texture2D(TEXTURE_1,vec2(0)).r,.5);
+float dusk = min(smoothstep(.1,.4,daylight.y),smoothstep(1.,.8,daylight.y));
 float uw = step(FOG_CONTROL.x,0.);
 float nether = FOG_CONTROL.x/FOG_CONTROL.y;nether=step(.1,nether)-step(.12,nether);
-//float nv = step(.9,texture2D(TEXTURE_1,vec2(0)).r);
-
-//ESBE_tonemap	see http://filmicworlds.com/blog/filmic-tonemapping-operators/
-//1が標準,小…暗,大…明
-vec3 ambient = mix(mix(mix(/*雨*/vec3(0.8,0.82,1.0),mix(mix(/*夜*/vec3(0.7,0.72,0.8),/*昼*/vec3(1.57,1.56,1.5),daylight.y),/*日没*/vec3(1.6,1.25,0.8),dusk),weather),/*水*/vec3(1.),wf),/*屋内*/vec3(1.2,1.1,1.0),indoor);
-if(uw+nether>.5)ambient = FOG_COLOR.rgb/dot(FOG_COLOR.rgb,vec3(0.298912, 0.586611, 0.114478))*.1+.9;//fogcolor based tonemap(Nether&Underwater)
-diffuse.rgb = tonemap(diffuse.rgb,ambient);
-
-//ESBE_light
-#ifndef BLEND
-	#define dpow(x) x*x//光源の減衰の調整
-	diffuse.rgb += max(uv1.x-.5,0.)*(1.-dpow(diffuse.rgb))*mix(1.,indoor*.7+.3,daylight.x)*
-	vec3(1.0,0.65,0.3);//光源RGB torch color
+float sat = satur(diffuse.rgb);
+vec4 ambient = mix(//vec4(gamma.rgb,saturation)
+		vec4(1.,.97,.9,1.15),//indoor
+	mix(
+		vec4(.54,.72,.9,.9),//rain
+	mix(mix(
+		vec4(.45,.59,.9,1.),//night
+		vec4(1.15,1.17,1.1,1.2),//day
+	daylight.y),
+		vec4(1.4,.9,.5,.8),//dusk
+	dusk),weather),sun.y*nv);
+	if(uw+nether>.5)ambient = vec4(FOG_COLOR.rgb*.6+.4,.8);
+#ifdef USE_NORMAL
+	HM vec3 N = normalize(cross(dFdx(cPos),dFdy(cPos)));
+	float dotN = dot(normalize(-wPos),N);
 #endif
+
+//tonemap
+diffuse.rgb = tone(diffuse.rgb,ambient);
+
+//light_sorce
+float lum = dot(diffuse.rgb,vec3(.299,.587,.114));
+diffuse.rgb += max(fuv1.x-.5,0.)*(1.-lum*lum)*mix(1.,.3,daylight.x*sun.y)*vec3(1.0,0.65,0.3);
 
 //ESBEwater
 #ifdef FANCY
@@ -176,18 +177,19 @@ diffuse.rgb = tonemap(diffuse.rgb,ambient);
 	}
 #endif
 
-//ESBE_shadow
+//shadow
 float ao = 1.;
-if(color.r==color.g && color.g==color.b)ao = smoothstep(.48*daylight.y,.52*daylight.y,color.g);
-diffuse.rgb *= 1.-mix(/*影の濃さ*/0.5,0.0,min(sunlight,ao))*(1.-uv1.x)*daylight.x;
-#if defined(FANCY) && defined(USE_NORMAL)//FLAT_SHADING
-	float fl_s = min(1.,dot(n,vec3(0.,.8,.6))*.45+.64);
-	fl_s = mix(fl_s,max(dot(n,vec3(.9,.44,0.)),dot(n,vec3(-.9,.44,0.)))*1.3+.2,dusk);
-	diffuse.rgb *= mix(1.0,fl_s,smoothstep(.7,.95,uv1.y)*min(1.25-uv1.x,1.)*daylight.x);
-#endif
+if(inColor.r==inColor.g && inColor.g==inColor.b)ao = smoothstep(.48*daylight.y,.52*daylight.y,inColor.g);
+float Nl =
+	#ifdef USE_NORMAL
+		mix(1.,smoothstep(-.7+dusk,1.,dot(normalize(vec3(dusk*6.,4,3)),vec3(abs(N.x),N.yz))),sun.y);
+	#else
+		1.;
+	#endif
+diffuse.rgb *= 1.-mix(.5,0.,min(min(sun.x,ao),Nl))*(1.-max(0.,fuv1.x-sun.y*.7))*daylight.x;
 
 //ESBE_sun_ref (unused)
-//vec4(1)…色, vec3(1)…座標
+//vec4 (1)… color, vec3 (1)… coordinates
 /*#ifdef BLEND
 if(diffuse.a!=0.){
 	vec3 N = normalize(cross(dFdx(cPos),dFdy(cPos)));
@@ -199,7 +201,7 @@ if(diffuse.a!=0.){
 	diffuse.rgb = mix( diffuse.rgb, FOG_COLOR.rgb, fog );
 #endif
 
-//#define DEBUG//デバッグ画面
+//#define DEBUG//Debug screen
 #ifdef DEBUG
 	HM vec2 subdisp = gl_FragCoord.xy/1024.;
 	if(subdisp.x<1. && subdisp.y<1.){

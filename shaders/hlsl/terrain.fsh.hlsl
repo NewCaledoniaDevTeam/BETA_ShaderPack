@@ -112,35 +112,48 @@ float4 tex1 = TEXTURE_1.Sample(TextureSampler1, PSInput.uv1);
 	diffuse.a = 1.0f;
 #endif
 
-//DATABASE
-float weather =
-#ifdef FOG
-	smoothstep(.7,.96,FOG_CONTROL.y);
-#else
-	1.;
-#endif
-float2 daylight = TEXTURE_1.Sample(TextureSampler1,float2(0.,1.)).rr;
-daylight.x *= weather;
-float sunlight = smoothstep(0.865,0.875,PSInput.uv1.y);
-float indoor = smoothstep(1.0,0.5,PSInput.uv1.y);
-float dusk = min(smoothstep(0.4,0.55,daylight.y),smoothstep(0.8,0.65,daylight.y));
+//datas
+float time = TOTAL_REAL_WORLD_TIME;
+float nv = step(TEXTURE_1.Sample(TextureSampler1,float2(0,0)).r,.5);
+float dusk = min(smoothstep(.1,.4,daylight.y),smoothstep(1.,.8,daylight.y));
 float uw = step(FOG_CONTROL.x,0.);
 float nether = FOG_CONTROL.x/FOG_CONTROL.y;nether=step(.1,nether)-step(.12,nether);
-
-//ESBE_tonemap	see http://filmicworlds.com/blog/filmic-tonemapping-operators/
-//1が標準,小…暗,大…明
-float3 ambient = lerp(lerp(lerp(/*雨*/float3(0.8,0.82,1.0),lerp(lerp(/*夜*/float3(0.7,0.72,0.8),/*昼*/float3(1.57,1.56,1.5),daylight.y),/*日没*/float3(1.6,1.25,0.8),dusk),weather),/*水*/float3(1.,1.,1.),PSInput.wf),/*屋内*/float3(1.2,1.1,1.0),indoor);
-if(uw+nether>.5)ambient = FOG_COLOR.rgb/dot(FOG_COLOR.rgb,float3(0.298912, 0.586611, 0.114478))*.1+.9;//fogcolor based tonemap(Nether&Underwater)
-diffuse.rgb = tonemap(diffuse.rgb,ambient);
-
-//ESBE_light
-#ifndef BLEND
-	#define dpow(x) x*x//光源の減衰の調整
-	diffuse.rgb += max(PSInput.uv1.x-.5,0.)*(1.-dpow(diffuse.rgb))*lerp(1.,indoor*.7+.3,daylight.x)*
-	float3(1.0,0.65,0.3);//光源RGB
+float sat = satur(diffuse.rgb);
+float4 ambient = lerp(//float4(gamma.rgb,saturation)
+		float4(1.,.97,.9,1.15),//indoor
+	lerp(
+		float4(.54,.72,.9,.9),//rain
+	lerp(lerp(
+		float4(.45,.59,.9,1.),//night
+		float4(1.15,1.17,1.1,1.2),//day
+	daylight.y),
+		float4(1.4,.9,.5,.8),//dusk
+	dusk),weather),sun.y*nv);
+	if(uw+nether>.5)ambient = float4(FOG_COLOR.rgb*.6+.4,.8);
+#ifdef USE_NORMAL
+	float3 N = normalize(cross(ddx(-PSInput.cPos),ddy(PSInput.cPos)));
+	float dotN = dot(normalize(-PSInput.wPos),N);
 #endif
 
-//ESBEwater
+//tonemap
+diffuse.rgb = tone(diffuse.rgb,ambient);
+
+//light_sorce
+float lum = dot(diffuse.rgb,float3(.299,.587,.114));
+diffuse.rgb += max(fuv1.x-.5,0.)*(1.-lum*lum)*lerp(1.,.3,daylight.x*sun.y)*float3(1.0,0.65,0.3);
+
+//shadow
+float ao = 1.;
+if(PSInput.color.r==PSInput.color.g && PSInput.color.g==PSInput.color.b)ao = smoothstep(.48*daylight.y,.52*daylight.y,PSInput.color.g);
+float Nl =
+	#ifdef USE_NORMAL
+		lerp(1.,smoothstep(-.7+dusk,1.,dot(normalize(float3(dusk*6.,4,3)),float3(abs(N.x),N.yz))),sun.y);
+	#else
+		1.;
+	#endif
+diffuse.rgb *= 1.-lerp(.5,0.,min(min(sun.x,ao),Nl))*(1.-max(0.,fuv1.x-sun.y*.7))*daylight.x;
+
+//water
 #ifdef FANCY
 	float3 n = normalize(cross(ddx(-PSInput.cPos),ddy(PSInput.cPos)));
 	if(PSInput.wf+uw>.5){
@@ -150,18 +163,15 @@ diffuse.rgb = tonemap(diffuse.rgb,ambient);
 	}
 #endif
 
-//ESBE_shadow
-float ao = 1.;
-if(PSInput.color.r==PSInput.color.g && PSInput.color.g==PSInput.color.b)ao = smoothstep(.48*daylight.y,.52*daylight.y,PSInput.color.g);
-diffuse.rgb *= 1.-lerp(/*影の濃さ*/0.5,0.0,min(sunlight,ao))*(1.-PSInput.uv1.x)*daylight.x;
-#ifdef FANCY//FLAT_SHADING
-	float fl_s = min(1.,dot(n,float3(0.,.8,.6))*.45+.64);
-	fl_s = lerp(fl_s,max(dot(n,float3(.9,.44,0.)),dot(n,float3(-.9,.44,0.)))*1.3+.2,dusk);
-	diffuse.rgb *= lerp(1.,fl_s,smoothstep(.7,.95,PSInput.uv1.y)*min(1.25-PSInput.uv1.x,1.)*daylight.x);
+//gate
+#if defined(BLEND) && defined(USE_NORMAL)
+	float2 gate = float2(PSInput.cPos.x+PSInput.cPos.z,PSInput.cPos.y);
+	if(1.5<PSInput.block && PSInput.block<2.5)diffuse=lerp(diffuse,lerp(float4(.2,0,1,.5),float4(1,.5,1,1),(snoise(gate+snoise(gate+time*.1)-time*.1)*.5+.5)*(dotN*-.5+1.)),.7);
+	else if(2.5<PSInput.block && diffuse.a>.5 && sat<.2)diffuse.rgb=lerp((FOG_COLOR.rgb+tex1.rgb)*.5,diffuse.rgb,dotN*.9+.1);
 #endif
 
 #ifdef FOG
-	diffuse.rgb = lerp( diffuse.rgb, FOG_COLOR.rgb, PSInput.fog );
+	diffuse.rgb = lerp( diffuse.rgb, PSInput.fogColor.rgb, PSInput.fogColor.a );
 #endif
 
 	PSOutput.color = diffuse;

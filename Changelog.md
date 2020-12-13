@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [BETA]
 
+## [1.4.10] - 2020-12-12
+### Added
+- replace some shader things
+- added render dragon support
+
 ## [1.4.9] - 2020-12-02
 ### Fixed
 - vignette code

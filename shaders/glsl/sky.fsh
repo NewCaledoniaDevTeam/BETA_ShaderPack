@@ -57,13 +57,13 @@ void main()
 		if(aflag > 0.){
 			vec2 apos = vec2(pos.x-TOTAL_REAL_WORLD_TIME*.004,pos.y*10.);
 			apos.y += sin(pos.x*20.+TOTAL_REAL_WORLD_TIME*.1)*.15;
-			vec3 ac = mix(/*オーロラ色1*/vec3(0.,.8,.4),/*オーロラ色2*/vec3(.4,.2,.8),sin(apos.x+apos.y+TOTAL_REAL_WORLD_TIME*.01)*.5+.5);
+			vec3 ac = mix(/*Aurora color 1*/vec3(0.,.8,.4),/*Aurora color 2*/vec3(.4,.2,.8),sin(apos.x+apos.y+TOTAL_REAL_WORLD_TIME*.01)*.5+.5);
 			float am = fBM(4,.5,1.,apos);
 			col.rgb += ac*am*smoothstep(.5,0.,length(pos))*aflag;
 		}
 
 		//CLOUDS
-		vec3 cc = mix(/*雨*/vec3(mix(.2,.9,day)),mix(mix(/*夜*/vec3(.1,.18,.38),/*昼*/vec3(.97,.96,.90),day),/*日没*/vec3(.97,.72,.38),ss),weather);
+		vec3 cc = mix(/*rain*/vec3(mix(.2,.9,day)),mix(mix(/*Night*/vec3(.1,.18,.38),/*Noon*/vec3(.97,.96,.90),day),/*sunset*/vec3(.97,.72,.38),ss),weather);
 		float lb = mix(.1,.5,weather);
 		float cm = fBM(uw?4:6,lb,.8,pos*3.-TOTAL_REAL_WORLD_TIME*.002);
 		if(cm>0.){
