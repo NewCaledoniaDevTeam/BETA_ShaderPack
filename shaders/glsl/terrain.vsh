@@ -83,41 +83,17 @@ float rand =
 #else
 	worldPos.xyz = (POSITION.xyz * CHUNK_ORIGIN_AND_SCALE.w) + CHUNK_ORIGIN_AND_SCALE.xyz;
 	worldPos.w = 1.0;
-const float DIST_DESATURATION = 56.0 / 255.0; //WARNING this value is also hardcoded in the water color, don'tchange
-
-highp float hash11(highp float p){
-	p = fract(p * .1031);
-	p *= p + 33.33;
-	return fract((p + p) * p);
-}
-
-highp float random(highp float p){
-	p = p/3.+TOTAL_REAL_WORLD_TIME;
-	return mix(hash11(floor(p)),hash11(ceil(p)),smoothstep(0.0,1.0,fract(p)))*2.0;
-}
-
-wf = 0.;
-/////waves
-POS3 p = vec3(POSITION.x==16.?0.:POSITION.x,abs(POSITION.y-8.),POSITION.z==16.?0.:POSITION.z);
-float wav = sin(TOTAL_REAL_WORLD_TIME*3.5+2.*p.x+2.*p.z+p.y);
-float rand = random(p.x+p.y+p.z);
-
-#ifdef AS_ENTITY_RENDERER
-		POS4 pos = WORLDVIEWPROJ * POSITION;
-		worldPos = pos;
-#else
-		worldPos.xyz = (POSITION.xyz * CHUNK_ORIGIN_AND_SCALE.w) + CHUNK_ORIGIN_AND_SCALE.xyz;
-		worldPos.w = 1.0;
-
-		/////waves
-		if(color.a < 0.95 && color.a > 0.05 && color.g > color.r)worldPos.y += wav*.05*fract(POSITION.y)*rand*clamp(1.-length(worldPos.xyz)/FAR_CHUNKS_DISTANCE,0.,1.);
-
-		// Transform to view space before projection instead of all at once to avoid floating point errors
-		// Not required for entities because they are already offset by camera translation before rendering
-		// World position here is calculated above and can get huge
-		POS4 pos = WORLDVIEW * worldPos;
-		pos = PROJ * pos;
-#endif
+	//water
+	#ifndef SEASONS
+		if(.05<color.a&&color.a<.95){
+			#ifdef FANCY
+				worldPos.y+=gwav(POSITION.x+POSITION.z-TOTAL_REAL_WORLD_TIME*2.,mix(.3,.8,uv1.y)*rand,4.)*fract(POSITION.y)*saturate(1.-length(worldPos.xyz)/FAR_CHUNKS_DISTANCE)*.2;
+			#else
+				float wwav = sin((POSITION.x+POSITION.z-TOTAL_REAL_WORLD_TIME*2.)*1.57)*.5+.5;
+				worldPos.y+=(wwav*wwav-.5)*fract(POSITION.y)*saturate(1.-length(worldPos.xyz)/FAR_CHUNKS_DISTANCE)*mix(.02,.07,uv1.y);
+			#endif
+		}
+	#endif
 	// Transform to view space before projection instead of all at once to avoid floating point errors
 	// Not required for entities because they are already offset by camera translation before rendering
 	// World position here is calculated above and can get huge

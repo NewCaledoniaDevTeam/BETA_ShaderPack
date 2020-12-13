@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [BETA]
 
+## [1.4.11] - 2020-12-12
+### Added
+- Next Gen Shader Folder
+- bluer sky with clouds
+
 ## [1.4.10] - 2020-12-12
 ### Added
 - replace some shader things

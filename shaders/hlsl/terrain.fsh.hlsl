@@ -1,13 +1,13 @@
 #include "ShaderConstants.fxh"
 #include "util.fxh"
 #include "snoise.fxh"
+#define USE_NORMAL
 
-struct PS_Input
-{
+struct PS_Input{
 	float4 position : SV_Position;
 	float3 cPos : chunkedPos;
 	float3 wPos : worldPos;
-	float wf : WaterFlag;
+	float block : BlockFlag;
 
 #ifndef BYPASS_PIXEL_SHADER
 	lpfloat4 color : COLOR;
@@ -16,59 +16,33 @@ struct PS_Input
 #endif
 
 #ifdef FOG
-	float fog : fog_a;
+	float4 fogColor : FOG_COLOR;
 #endif
 };
 
-struct PS_Output
-{
-	float4 color : SV_Target;
-};
+struct PS_Output{float4 color : SV_Target;};
 
-float3 curve(float3 x){
-	static const float A = 0.50;
-	static const float B = 0.10;
-	static const float C = 0.40;
-	static const float D = 0.65;
-	static const float E = 0.05;
-	static const float F = 0.20;
-	return ((x*(A*x+C*B)+D*E)/(x*(A*x+B)+D*F))-E/F;
+float aces(float x){
+	//https://knarkowicz.wordpress.com/2016/01/06/aces-filmic-tone-mapping-curve/
+	return saturate((x*(2.51*x+.03))/(x*(2.43*x+.59)+.14));
 }
-
-float3 tonemap(float3 col, float3 gamma){
-	static const float saturation = 1.2;
-	//static const float exposure = 1.0;
-	col = pow(col,1./gamma);
-	float luma = dot(col, float3(0.298912, 0.586611, 0.114478));
-	col = curve((col-luma)*saturation+luma);
-	return col/curve(float3(1./*1./exposure*/,0.,0.)).r;
+float3 aces3(float3 x){return float3(aces(x.x),aces(x.y),aces(x.z));}
+float3 tone(float3 col,float4 gs){
+	float lum = dot(col,float3(.299,.587,.114));//http://poynton.ca/notes/colour_and_gamma/ColorFAQ.html#RTFToC11
+	col = aces3((col-lum)*gs.a+lum)*1.2;// /aces(1.1);
+	return pow(col,1./gs.rgb);
 }
-float4 water(float4 col,float3 p,float3 wPos,float weather,float uw,float sun,float3 tex1){
-	sun = smoothstep(.5,.9,sun);
-	float3 T = normalize(abs(wPos)); float cosT = length(T.xz);
-	p.xz = p.xz*float2(1.0,0.4)+smoothstep(0.,8.,abs(p.y-8.))*.5;
-	float n = (snoise(p.xz-TOTAL_REAL_WORLD_TIME*.5)+snoise(float2(p.x-TOTAL_REAL_WORLD_TIME,(p.z+TOTAL_REAL_WORLD_TIME)*.5)))+2.;//[0.~4.]
-
-	float4 diffuse = lerp(col,col*lerp(1.5,1.3,T.y*uw),pow(1.-abs(n-2.)*.5,bool(uw)?1.5:2.5));
-	if(bool(uw)){//new C_REF
-		float2 skp = (wPos.xz+n*4.*wPos.xz/max(length(wPos.xz),.5))*cosT*.1;
-		skp.x -= TOTAL_REAL_WORLD_TIME*.05;
-		float2 ssreff = lerp(float2(.7,.7),float2(.8,.6),clamp(FOG_COLOR.r-FOG_COLOR.g,0.,.4)*2.5);
-		float4 skc = lerp(lerp(col,FOG_COLOR,cosT*ssreff.x),float4(lerp(tex1,FOG_COLOR.rgb,cosT*ssreff.y),1),smoothstep(0.,1.,snoise(skp)));
-		float s_ref = sun*weather*smoothstep(.7,0.,T.y)*lerp(.3,1.,smoothstep(1.5,4.,n))*.9;
-		skc = lerp(skc,1,smoothstep(3.+abs(wPos.y)*.3,0.,abs(wPos.z))*s_ref);
-		diffuse = lerp(diffuse,skc,cosT*sun);
-	}
-	return lerp(diffuse,col,min(.7,T.y));
+float satur(float3 col){//https://qiita.com/akebi_mh/items/3377666c26071a4284ee
+	float v=max(max(col.r,col.g),col.b);
+	return v>0.?(v-min(min(col.r,col.g),col.b))/v:0.;
 }
-
+float pow5(float x){return x*x*x*x*x;}
 
 ROOT_SIGNATURE
-void main(in PS_Input PSInput, out PS_Output PSOutput)
-{
+void main(in PS_Input PSInput, out PS_Output PSOutput){
 #ifdef BYPASS_PIXEL_SHADER
-		PSOutput.color = float4(0.0f, 0.0f, 0.0f, 0.0f);
-		return;
+	PSOutput.color = float4(0.0f, 0.0f, 0.0f, 0.0f);
+	return;
 #else
 
 #if USE_TEXEL_AA
@@ -85,18 +59,24 @@ void main(in PS_Input PSInput, out PS_Output PSOutput)
 	#ifdef ALPHA_TO_COVERAGE
 		#define ALPHA_THRESHOLD 0.05
 	#else
-		#define ALPHA_THRESHOLD 0.52
+		#define ALPHA_THRESHOLD 0.5
 	#endif
-	if(diffuse.a < ALPHA_THRESHOLD)discard;
+	if(diffuse.a < ALPHA_THRESHOLD)
+		discard;
 #endif
 
-#ifdef BLEND
+#if defined(BLEND)
 	diffuse.a *= PSInput.color.a;
 #endif
 
-float4 tex1 = TEXTURE_1.Sample(TextureSampler1, PSInput.uv1);
-#ifndef ALWAYS_LIT
-	diffuse *= tex1;
+float2 sun = smoothstep(float2(.855,.4),float2(.875,1.),PSInput.uv1.yy);
+float weather = smoothstep(.7,.96,FOG_CONTROL.y);
+float br = TEXTURE_1.Sample(TextureSampler1,float2(.5,0.)).r;
+float2 daylight = TEXTURE_1.Sample(TextureSampler1,float2(0.,1.)).rr;daylight=smoothstep(br-.2,br+.2,daylight);daylight.x*=weather;
+float2 fuv1 = float2(PSInput.uv1.x-smoothstep(.2,1.,daylight.y)*(weather*.9+.1)*lerp(sun.y,sun.x,smoothstep(.8,1.,daylight.y)*.8),PSInput.uv1.y);
+float4 tex1 = TEXTURE_1.Sample(TextureSampler1, fuv1);
+#if !defined(ALWAYS_LIT)
+	diffuse = diffuse * tex1;
 #endif
 
 #ifndef SEASONS
@@ -112,22 +92,24 @@ float4 tex1 = TEXTURE_1.Sample(TextureSampler1, PSInput.uv1);
 	diffuse.a = 1.0f;
 #endif
 
+//=*=*= ESBE_3G start =*=*=//
+
 //datas
 float time = TOTAL_REAL_WORLD_TIME;
 float nv = step(TEXTURE_1.Sample(TextureSampler1,float2(0,0)).r,.5);
-float dusk = min(smoothstep(.1,.4,daylight.y),smoothstep(1.,.8,daylight.y));
+float dusk = min(smoothstep(.2,.4,daylight.y),smoothstep(1.,.8,daylight.y));
 float uw = step(FOG_CONTROL.x,0.);
 float nether = FOG_CONTROL.x/FOG_CONTROL.y;nether=step(.1,nether)-step(.12,nether);
 float sat = satur(diffuse.rgb);
 float4 ambient = lerp(//float4(gamma.rgb,saturation)
 		float4(1.,.97,.9,1.15),//indoor
 	lerp(
-		float4(.54,.72,.9,.9),//rain
+		float4(.67,.81,.85,.9),//rain
 	lerp(lerp(
-		float4(.45,.59,.9,1.),//night
+		float4(.9,.93,1.,1.),//night
 		float4(1.15,1.17,1.1,1.2),//day
 	daylight.y),
-		float4(1.4,.9,.5,.8),//dusk
+		float4(1.4,1.,.7,.8),//dusk
 	dusk),weather),sun.y*nv);
 	if(uw+nether>.5)ambient = float4(FOG_COLOR.rgb*.6+.4,.8);
 #ifdef USE_NORMAL
@@ -154,13 +136,30 @@ float Nl =
 diffuse.rgb *= 1.-lerp(.5,0.,min(min(sun.x,ao),Nl))*(1.-max(0.,fuv1.x-sun.y*.7))*daylight.x;
 
 //water
-#ifdef FANCY
-	float3 n = normalize(cross(ddx(-PSInput.cPos),ddy(PSInput.cPos)));
-	if(PSInput.wf+uw>.5){
-		diffuse = water(diffuse,PSInput.cPos,PSInput.wPos,weather,1.-uw,PSInput.uv1.y,tex1.rgb);
-		float w_r = 1.-dot(normalize(-PSInput.wPos),n);
-		diffuse.a = lerp(diffuse.a,1.,.02+.98*w_r*w_r*w_r*w_r*w_r);
-	}
+if(.5<PSInput.block && PSInput.block<1.5){
+	float2 grid = mul((PSInput.cPos.xz+smoothstep(0.,8.,abs(PSInput.cPos.y-8.))*.5-time),float2x2(1,-.5,.5,.5));
+	float2 wav = sin(grid.yx*float2(3.14,1.57)+time*4.)*.1; grid+=wav;
+	float3 T = normalize(abs(PSInput.wPos));float omsin = 1.-T.y;
+	float4 water = lerp(diffuse,float4(lerp(tex1.rgb,FOG_COLOR.rgb,sun.y),1),.02+.98*pow5(
+			#ifdef USE_NORMAL
+				1.-dotN
+			#else
+				omsin
+			#endif
+			));//fresnel
+	float2 skp = (PSInput.wPos.xz*.4-(frac(grid*.625)-.5)*T.xz*omsin*omsin);
+	#ifdef FANCY
+		water = lerp(water,float4(lerp(tex1.rgb,FOG_COLOR.rgb,length(T.xz)*.7),1),smoothstep(-.5,1.,snoise(skp/abs(PSInput.wPos.y)-float2(time*.02,0)+wav*.07))*T.y*sun.y);//c_ref
+	#endif
+	water.rgb = lerp(water.rgb,tex1.rgb,saturate(snoise(normalize(skp)*3.+time*.02)*.5+.5)*omsin);//t_ref
+	float3 Ts = normalize(float3(abs(skp.x),PSInput.wPos.y,skp.y));
+	float sunT = lerp(-.1,.4,saturate(daylight.y*1.5-.5));
+	water = lerp(water,float4(FOG_COLOR.rgb*.5+.8,.9),smoothstep(.97,1.,dot(float2(cos(sunT),-sin(sunT)),Ts.xy))*smoothstep(.5,1.,normalize(FOG_COLOR.rgb).r)*sun.y);//sun
+	diffuse = lerp(diffuse,water,(length(T.xz)*.5+.5)*smoothstep(0.,1.,length(PSInput.wPos)));
+#if !defined(ALPHA_TEST) && defined(USE_NORMAL)
+}else if(uw<.5)diffuse.rgb=lerp(diffuse.rgb,ambient.rgb,(1.-weather)*smoothstep(-.7,1.,N.y)*pow5(1.-dotN)*sun.y*tex1.g*(snoise(PSInput.cPos.xz)*.2+.8));
+#else
+}
 #endif
 
 //gate
@@ -169,6 +168,8 @@ diffuse.rgb *= 1.-lerp(.5,0.,min(min(sun.x,ao),Nl))*(1.-max(0.,fuv1.x-sun.y*.7))
 	if(1.5<PSInput.block && PSInput.block<2.5)diffuse=lerp(diffuse,lerp(float4(.2,0,1,.5),float4(1,.5,1,1),(snoise(gate+snoise(gate+time*.1)-time*.1)*.5+.5)*(dotN*-.5+1.)),.7);
 	else if(2.5<PSInput.block && diffuse.a>.5 && sat<.2)diffuse.rgb=lerp((FOG_COLOR.rgb+tex1.rgb)*.5,diffuse.rgb,dotN*.9+.1);
 #endif
+
+//=*=*=  ESBE_3G end  =*=*=//
 
 #ifdef FOG
 	diffuse.rgb = lerp( diffuse.rgb, PSInput.fogColor.rgb, PSInput.fogColor.a );

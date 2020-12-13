@@ -1,7 +1,6 @@
 #include "ShaderConstants.fxh"
 
-struct VS_Input
-{
+struct VS_Input{
 	float3 position : POSITION;
 	float4 color : COLOR;
 #ifdef INSTANCEDSTEREO
@@ -9,12 +8,9 @@ struct VS_Input
 #endif
 };
 
-
-struct PS_Input
-{
+struct PS_Input{
 	float4 position : SV_Position;
-	float4 fog : FOG;
-	float2 pos : POS;
+	float4 color : COLOR;
 #ifdef GEOMETRY_INSTANCEDSTEREO
 	uint instanceID : SV_InstanceID;
 #endif
@@ -24,15 +20,12 @@ struct PS_Input
 };
 
 ROOT_SIGNATURE
-void main(in VS_Input VSInput, out PS_Input PSInput)
-{
-	float4 dome = float4( VSInput.position, 1 );
-	dome.y -= length(dome.xz)*.2;
+void main(in VS_Input VSInput, out PS_Input PSInput){
 #ifdef INSTANCEDSTEREO
 	int i = VSInput.instanceID;
-	PSInput.position = mul( WORLDVIEWPROJ_STEREO[i], dome);
+	PSInput.position = mul(WORLDVIEWPROJ_STEREO[i],float4(VSInput.position,1));
 #else
-	PSInput.position = mul(WORLDVIEWPROJ, dome);
+	PSInput.position = mul(WORLDVIEWPROJ,float4(VSInput.position,1));
 #endif
 #ifdef GEOMETRY_INSTANCEDSTEREO
 	PSInput.instanceID = VSInput.instanceID;
@@ -40,6 +33,5 @@ void main(in VS_Input VSInput, out PS_Input PSInput)
 #ifdef VERTEXSHADER_INSTANCEDSTEREO
 	PSInput.renTarget_id = VSInput.instanceID;
 #endif
-	PSInput.pos = VSInput.position.xz;
-	PSInput.fog = VSInput.color.r;
+	PSInput.color = lerp(CURRENT_COLOR,FOG_COLOR,VSInput.color.r);
 }

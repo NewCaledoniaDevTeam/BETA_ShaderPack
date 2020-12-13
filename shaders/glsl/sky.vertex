@@ -4,26 +4,19 @@
 #if __VERSION__ >= 300
 	#define attribute in
 	#define varying out
-#else
 #endif
-
 #ifdef GL_FRAGMENT_PRECISION_HIGH
 	#define HM highp
 #else
 	#define HM mediump
 #endif
 uniform MAT4 WORLDVIEWPROJ;
+uniform vec4 FOG_COLOR;
+uniform vec4 CURRENT_COLOR;
 attribute mediump vec4 POSITION;
 attribute vec4 COLOR;
-
-varying float fog;
-varying HM vec2 pos;
-
-void main()
-{
-	vec4 dome = POSITION;
-	dome.y -= length(dome.xz)*.2;
-	gl_Position = WORLDVIEWPROJ * dome;
-	pos = POSITION.xz;
-	fog = COLOR.r;
+varying vec4 color;
+void main(){
+	gl_Position = WORLDVIEWPROJ*POSITION;
+	color = mix(CURRENT_COLOR,FOG_COLOR,COLOR.r);
 }
