@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [BETA]
 
+## [1.4.12] - 2020-12-12
+### Added
+- New Panorama
+- Changed flower tulip orange to Fire Flower Orange Tulip from Mario
+- redstone ore and block animate
+
+### Fixed
+- Clouds
+- Back to old Gen Shader (I didn't like it and saw no reason of upgrading)
+
 ## [1.4.11] - 2020-12-12
 ### Added
 - Next Gen Shader Folder
