@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [BETA]
 
+## [1.5.1] - 2021-1-5
+### Fixed
+- Dark Mode
+
+
 ## [1.5.0] - 2020-12-21
 ### Added
 - convert good music java pack [https://www.curseforge.com/minecraft/texture-packs/orchestra-soundpack](https://www.curseforge.com/minecraft/texture-packs/orchestra-soundpack)
