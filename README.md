@@ -1,9 +1,11 @@
 # UniversalShaderPack
 
-![Logo](pack_icon.png)
+<!--![Logo](pack_icon.png)-->
+<!--![title](textures/ui/title.png)-->
 
-
-![Comparing screenshots]()
+ <div align="center"> 
+    <img src="textures/ui/title.png" alt="title" width="883" height="166">
+ </div>
 
 
 ## Download
@@ -18,11 +20,7 @@ See [Changelog](Changelog.txt).
 
 - iOS
 - Android
-- Windows 10
-- Kindle (untested)
-- Xbox (untested)
-- Playstation (untested)
-- Switch (untested)
+- Windows 10 [Required settings because of RTX]
 
 ## Tested on
 
@@ -30,11 +28,12 @@ See [Changelog](Changelog.txt).
 - Minecraft Bedrock 1.16.40, Google Pixel 1, Android 10
 - Minecraft Bedrock 1.16.40, Google Pixel 3, Android 11
 - Minecraft Bedrock 1.16.40, Samsung Galaxy S7, Android 8
-- Minecraft Bedrock 1.16.40, multiple Windows 10 computers
+- Minecraft Bedrock 1.16.40, multiple Windows 10 computers [Textures only]
 
 ## Author
 
 - PiSaucer
+- Mountain Top
 
 ## License
 [MIT](LICENSE)
