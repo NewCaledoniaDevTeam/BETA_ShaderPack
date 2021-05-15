@@ -1,4 +1,4 @@
-# UniversalShaderPack
+# Shader Pack Beta
 
 <!--![Logo](pack_icon.png)-->
 <!--![title](textures/ui/title.png)-->
