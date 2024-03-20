@@ -6,10 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [BETA]
 
+## [1.5.2] - 2024-3-19
+### Fixed
+- Marketplace Button
+
+### Removed
+- Rainbow XP Bar
+
 ## [1.5.1] - 2021-1-5
 ### Fixed
 - Dark Mode
-
 
 ## [1.5.0] - 2020-12-21
 ### Added
